@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex SOS Admin Dashboard</title>
+    <!-- React and Babel for JSX compilation -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'display': ['Space Grotesk', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        'dark': {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617'
+                        },
+                        'accent': {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            200: '#f5d0fe',
+                            300: '#f0abfc',
+                            400: '#e879f9',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            700: '#a21caf',
+                            800: '#86198f',
+                            900: '#701a75'
+                        }
+                    },
+                    animation: {
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+                        'slide-up': 'slide-up 0.3s ease-out',
+                        'fade-in': 'fade-in 0.5s ease-out',
+                        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite'
+                    },
+                    keyframes: {
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(217, 70, 239, 0.4)' },
+                            '50%': { boxShadow: '0 0 30px rgba(217, 70, 239, 0.6)' }
+                        },
+                        'slide-up': {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        'fade-in': {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Socket.IO Client Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+    <!-- Leaflet.js for the interactive map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Modern Fonts from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(217, 70, 239, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(217, 70, 239, 0.5);
+        }
+        /* Glass morphism effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Map styling */
+        .leaflet-container {
+            height: 100% !important;
+            width: 100% !important;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .leaflet-tile-pane {
+            filter: hue-rotate(200deg) saturate(0.8) brightness(0.7) contrast(1.2);
+        }
+        /* Alert pulse animation */
+        @keyframes alert-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(217, 70, 239, 0.4);
+            }
+            50% { 
+                transform: scale(1.02);
+                box-shadow: 0 0 30px rgba(217, 70, 239, 0.6);
+            }
+        }
+        .alert-new {
+            animation: alert-pulse 2s ease-in-out 3;
+        }
+        /* Status indicator */
+        .status-online {
+            position: relative;
+        }
+        .status-online::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border-radius: 50%;
+            border: 2px solid #0f172a;
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        /* Loading spinner */
+        .spinner {
+            border: 2px solid rgba(217, 70, 239, 0.1);
+            border-radius: 50%;
+            border-top: 2px solid #d946ef;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Custom marker styles */
+        .sos-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d946ef, #f43f5e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 4px 20px rgba(217, 70, 239, 0.6);
+            animation: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        /* Font Awesome icon fixes */
+        .fa-icon {
+            color: white;
+            font-size: 1.5rem;
+        }
+        .fa-icon-sm {
+            font-size: 1rem;
+        }
+        .fa-icon-lg {
+            font-size: 2rem;
+        }
+        .fa-icon-purple {
+            color: #d946ef;
+        }
+        .fa-icon-green {
+            color: #10b981;
+        }
+        .fa-icon-slate {
+            color: #64748b;
+        }
+        /* Map container fix */
+        #map {
+            height: 100% !important;
+            min-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-dark-950 text-slate-100 overflow-hidden">
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        
+        // Configuration - Updated to your Render server
+        const SERVER_URL = "https://vortex-safety-server.onrender.com";
+        const NAMESPACE = ''; // Set to '/sos' if your backend uses a namespace
+        
+        // Normalizer helper to handle different payload formats from server
+        const toAlert = (data) => {
+            if (!data) return null;
+            
+            return {
+                id: Date.now() + Math.random(),
+                user: data?.user || data?.name || data?.sender || 'Anonymous',
+                message: data?.message || data?.msg || data?.description || data?.text || 'Emergency assistance needed',
+                lat: parseFloat(data?.latitude || data?.lat || data?.location?.lat),
+                lon: parseFloat(data?.longitude || data?.lon || data?.lng || data?.location?.lng || data?.location?.lon),
+                timestamp: data?.timestamp || data?.time || data?.createdAt || new Date().toISOString()
+            };
+        };
+        
+        // Utility function to play alert sound with better error handling
+        const playAlertSound = () => {
+            // Check if user has interacted with the page first
+            if (document.hasStorageAccess || document.hasFocus()) {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // Check if audio context is allowed
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume().then(() => {
+                            createSound(audioContext);
+                        }).catch(error => {
+                            console.log('Audio context resume failed:', error);
+                        });
+                    } else {
+                        createSound(audioContext);
+                    }
+                } catch (error) {
+                    console.log('Audio not available:', error);
+                    // Fallback to simple beep if available
+                    try {
+                        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAT');
+                        audio.play().catch(() => {});
+                    } catch (e) {
+                        console.log('Fallback audio failed:', e);
+                    }
+                }
+            }
+        };
+        
+        const createSound = (audioContext) => {
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (error) {
+                console.log('Sound creation failed:', error);
+            }
+        };
+        
+        // Header Component
+        const Header = ({ isConnected, alertCount, lastUpdate }) => {
+            return (
+                <header className="glass-dark p-6 flex justify-between items-center z-20 border-b border-white/10">
+                    <div className="flex items-center space-x-6">
+                        <div className="relative">
+                            <div className="w-12 h-12 bg-gradient-to-br from-accent-500 to-rose-500 rounded-xl flex items-center justify-center">
+                                <i className="fas fa-shield-halved fa-icon text-white"></i>
+                            </div>
+                            {isConnected && <div className="status-online"></div>}
+                        </div>
+                        <div>
+                            <h1 className="font-display text-3xl font-bold bg-gradient-to-r from-accent-400 via-accent-500 to-rose-400 bg-clip-text text-transparent">
+                                Vortex SOS
+                            </h1>
+                            <p className="text-slate-400 text-sm font-medium">Emergency Response Center</p>
+                        </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-6">
+                        <div className="glass px-4 py-2 rounded-xl">
+                            <div className="flex items-center space-x-2">
+                                <span className="text-slate-300 text-sm">Total Alerts:</span>
+                                <span className="font-mono font-bold text-accent-400">{alertCount}</span>
+                            </div>
+                        </div>
+                        
+                        <div className="glass px-4 py-3 rounded-xl">
+                            <div className="flex items-center space-x-3">
+                                <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-500'}`}></div>
+                                <div className="text-right">
+                                    <span className="font-semibold text-sm">
+                                        {isConnected ? 'LIVE' : 'OFFLINE'}
+                                    </span>
+                                    {lastUpdate && (
+                                        <div className="text-xs text-slate-400">
+                                            Last: {new Date(lastUpdate).toLocaleTimeString()}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            );
+        };
+        
+        // Alert Item Component
+        const AlertItem = ({ alert, isLatest, onClick }) => {
+            const time = new Date(alert.timestamp).toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            
+            const timeAgo = React.useMemo(() => {
+                const now = new Date();
+                const alertTime = new Date(alert.timestamp);
+                const diffMinutes = Math.floor((now - alertTime) / 60000);
+                
+                if (diffMinutes < 1) return 'Just now';
+                if (diffMinutes < 60) return `${diffMinutes}m ago`;
+                const diffHours = Math.floor(diffMinutes / 60);
+                return `${diffHours}h ago`;
+            }, [alert.timestamp]);
+            
+            return (
+                <div 
+                    className={`glass rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:scale-[1.02] group animate-slide-up
+                        ${isLatest ? 'alert-new bg-gradient-to-r from-accent-500/10 to-rose-500/10 border-accent-500/50' : 'hover:border-accent-500/30'}`}
+                    onClick={() => onClick(alert)}
+                >
+                    <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-accent-500 to-rose-500 rounded-full flex items-center justify-center">
+                                <i className="fas fa-user text-white" style={{ fontSize: '1.2rem' }}></i>
+                            </div>
+                            <div>
+                                <span className="font-semibold text-lg text-white">
+                                    {alert.user}
+                                </span>
+                                <div className="text-xs text-slate-400">{timeAgo}</div>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-sm font-mono text-slate-300">{time}</div>
+                            {isLatest && (
+                                <div className="inline-flex items-center space-x-1 bg-accent-500/20 text-accent-300 text-xs px-2 py-1 rounded-full mt-1">
+                                    <div className="w-2 h-2 bg-accent-400 rounded-full animate-ping"></div>
+                                    <span>NEW</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    
+                    <p className="text-slate-300 leading-relaxed mb-3">{alert.message}</p>
+                    
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4 text-xs text-slate-400">
+                            <span className="flex items-center space-x-1">
+                                <i className="fas fa-map-pin" style={{ fontSize: '0.8rem' }}></i>
+                                <span>{alert.lat?.toFixed(4)}, {alert.lon?.toFixed(4)}</span>
+                            </span>
+                        </div>
+                        <div className="text-xs text-accent-400 group-hover:text-accent-300 transition-colors">
+                            View on Map →
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Live Feed Component
+        const LiveFeed = ({ alerts, onAlertClick, isConnected }) => {
+            const feedRef = useRef(null);
+            const latestAlertId = alerts.length > 0 ? alerts[0].id : null;
+            
+            useEffect(() => {
+                if (feedRef.current && alerts.length > 0) {
+                    feedRef.current.scrollTop = 0;
+                }
+            }, [alerts]);
+            
+            return (
+                <div className="glass-dark h-full flex flex-col border-r border-white/10">
+                    <div className="p-6 border-b border-white/10">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-semibold text-white flex items-center space-x-3">
+                                <i className="fas fa-broadcast-tower fa-icon-purple"></i>
+                                <span>Live SOS Feed</span>
+                            </h2>
+                            {isConnected && (
+                                <div className="flex items-center space-x-2 text-green-400">
+                                    <div className="spinner"></div>
+                                    <span className="text-sm">Monitoring</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    
+                    <div ref={feedRef} className="flex-grow overflow-y-auto p-6">
+                        {alerts.length === 0 ? (
+                            <div className="text-center text-slate-500 pt-20 animate-fade-in">
+                                <div className="w-24 h-24 mx-auto mb-6 glass rounded-2xl flex items-center justify-center">
+                                    <i className="fas fa-satellite-dish animate-pulse text-slate-600" style={{ fontSize: '3rem' }}></i>
+                                </div>
+                                <h3 className="font-semibold text-lg mb-2">System Ready</h3>
+                                <p className="text-sm">Monitoring for SOS signals...</p>
+                                <p className="text-xs text-slate-600 mt-2">Connected to: {SERVER_URL}</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                {alerts.map((alert, index) => (
+                                    <AlertItem 
+                                        key={alert.id} 
+                                        alert={alert}
+                                        isLatest={alert.id === latestAlertId}
+                                        onClick={onAlertClick}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+        
+        // Map View Component
+        const MapView = ({ selectedAlert }) => {
+            const mapRef = useRef(null);
+            const markerRef = useRef(null);
+            const mapContainerRef = useRef(null);
+            
+            useEffect(() => {
+                // Initialize map with a delay to ensure container is ready
+                const initializeMap = () => {
+                    if (!mapRef.current && mapContainerRef.current) {
+                        try {
+                            mapRef.current = L.map(mapContainerRef.current, { 
+                                zoomControl: false,
+                                attributionControl: true
+                            }).setView([20.5937, 78.9629], 5);
+                            
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '© OpenStreetMap contributors',
+                                maxZoom: 18
+                            }).addTo(mapRef.current);
+                            
+                            L.control.zoom({ position: 'topright' }).addTo(mapRef.current);
+                            
+                            // Invalidate size after a short delay
+                            setTimeout(() => {
+                                if (mapRef.current) {
+                                    mapRef.current.invalidateSize();
+                                }
+                            }, 100);
+                        } catch (error) {
+                            console.error('Map initialization failed:', error);
+                        }
+                    }
+                };
+                
+                // Use a timeout to ensure the container is rendered
+                const timer = setTimeout(initializeMap, 100);
+                
+                return () => clearTimeout(timer);
+            }, []);
+            
+            useEffect(() => {
+                if (mapRef.current && selectedAlert && selectedAlert.lat && selectedAlert.lon) {
+                    const { lat, lon } = selectedAlert;
+                    const latLng = [lat, lon];
+                    
+                    try {
+                        mapRef.current.flyTo(latLng, 15, { 
+                            animate: true, 
+                            duration: 2,
+                            easeLinearity: 0.1
+                        });
+                        
+                        // Remove existing marker
+                        if (markerRef.current) {
+                            mapRef.current.removeLayer(markerRef.current);
+                        }
+                        
+                        // Create custom icon
+                        const customIcon = L.divIcon({
+                            className: 'custom-sos-marker',
+                            html: `<div class="sos-marker"><i class="fas fa-exclamation-triangle"></i></div>`,
+                            iconSize: [40, 40],
+                            iconAnchor: [20, 20]
+                        });
+                        
+                        markerRef.current = L.marker(latLng, { icon: customIcon }).addTo(mapRef.current);
+                        
+                        const popupContent = `
+                            <div class="p-3 min-w-[200px]">
+                                <h3 class="font-bold text-lg mb-2">🚨 Emergency Alert</h3>
+                                <p class="mb-2"><strong>From:</strong> ${selectedAlert.user}</p>
+                                <p class="mb-2"><strong>Message:</strong> ${selectedAlert.message}</p>
+                                <p class="text-sm text-gray-600">
+                                    <strong>Time:</strong> ${new Date(selectedAlert.timestamp).toLocaleString()}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    <strong>Location:</strong> ${lat.toFixed(4)}, ${lon.toFixed(4)}
+                                </p>
+                            </div>
+                        `;
+                        
+                        markerRef.current.bindPopup(popupContent, {
+                            maxWidth: 300,
+                            className: 'custom-popup'
+                        }).openPopup();
+                    } catch (error) {
+                        console.error('Map update failed:', error);
+                    }
+                }
+            }, [selectedAlert]);
+            
+            return (
+                <div className="h-full w-full glass-dark rounded-2xl overflow-hidden relative">
+                    {!selectedAlert && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-dark-950/50 backdrop-blur-sm">
+                            <div className="text-center">
+                                <div className="w-16 h-16 mx-auto mb-4 glass rounded-2xl flex items-center justify-center">
+                                    <i className="fas fa-map text-slate-400" style={{ fontSize: '2rem' }}></i>
+                                </div>
+                                <h3 className="font-semibold text-lg text-white mb-2">Select an Alert</h3>
+                                <p className="text-slate-400 text-sm">Choose an SOS alert from the feed to view location</p>
+                            </div>
+                        </div>
+                    )}
+                    <div ref={mapContainerRef} id="map" className="h-full w-full"></div>
+                </div>
+            );
+        };
+        
+        // Main App Component
+        const App = () => {
+            const [isConnected, setIsConnected] = useState(false);
+            const [alerts, setAlerts] = useState([]);
+            const [selectedAlert, setSelectedAlert] = useState(null);
+            const [lastUpdate, setLastUpdate] = useState(null);
+            const [connectionError, setConnectionError] = useState(null);
+            const socketRef = useRef(null);
+            
+            useEffect(() => {
+                // Initialize Socket.IO connection to your Render server
+                const initializeSocket = () => {
+                    try {
+                        if (typeof io !== 'undefined') {
+                            console.log('Connecting to Vortex SOS server:', SERVER_URL);
+                            
+                            socketRef.current = io(SERVER_URL + NAMESPACE, {
+                                transports: ['websocket', 'polling'],
+                                path: '/socket.io',
+                                withCredentials: false,
+                                reconnection: true,
+                                reconnectionAttempts: 10,
+                                reconnectionDelay: 1000,
+                                timeout: 20000,
+                                forceNew: true
+                            });
+                            
+                            // Log all events to discover the actual event names from your server
+                            socketRef.current.onAny((event, ...args) => {
+                                console.log('[SOCKET EVENT]', event, args);
+                            });
+                            
+                            socketRef.current.on('connect', () => {
+                                console.log('✅ Connected to Vortex SOS server');
+                                setIsConnected(true);
+                                setConnectionError(null);
+                                setLastUpdate(new Date());
+                                
+                                // Optional: Request initial backlog if server supports acknowledgments
+                                socketRef.current.emit('subscribeSOS', {}, (initialAlerts = []) => {
+                                    try {
+                                        if (Array.isArray(initialAlerts) && initialAlerts.length > 0) {
+                                            console.log('Received initial alerts:', initialAlerts);
+                                            const normalized = initialAlerts
+                                                .map(a => toAlert(a))
+                                                .filter(a => a && Number.isFinite(a.lat) && Number.isFinite(a.lon));
+                                            
+                                            if (normalized.length) {
+                                                setAlerts(prev => [...normalized, ...prev].slice(0, 50));
+                                                setSelectedAlert(prev => prev || normalized[0]);
+                                            }
+                                        }
+                                    } catch (e) {
+                                        console.error('Backlog normalization failed:', e);
+                                    }
+                                });
+                            });
+                            
+                            socketRef.current.on('disconnect', (reason) => {
+                                console.log('❌ Disconnected from server:', reason);
+                                setIsConnected(false);
+                                setConnectionError(`Disconnected: ${reason}`);
+                            });
+                            
+                            socketRef.current.on('connect_error', (error) => {
+                                console.error('❌ Connection error:', error);
+                                setIsConnected(false);
+                                setConnectionError(error.message || 'Connection failed');
+                            });
+                            
+                            socketRef.current.on('reconnect', (attemptNumber) => {
+                                console.log('🔄 Reconnected after', attemptNumber, 'attempts');
+                                setConnectionError(null);
+                            });
+                            
+                            socketRef.current.on('reconnect_failed', () => {
+                                console.error('❌ Reconnection failed');
+                                setConnectionError('Failed to reconnect to server');
+                            });
+                            
+                            // Subscribe to multiple possible SOS event names
+                            // Check console logs to see which one your server actually uses
+                            const sosEventNames = [
+                                'sosAlert',      // Original event name from your code
+                                'sos',           // Common alternative
+                                'alert',         // Generic alert
+                                'emergency',     // Emergency event
+                                'sos:alert',     // Namespaced event
+                                'newSOS',        // Alternative naming
+                                'distress'       // Distress signal
+                            ];
+                            
+                            sosEventNames.forEach(eventName => {
+                                socketRef.current.on(eventName, (payload) => {
+                                    console.log(`🚨 Received SOS via '${eventName}':`, payload);
+                                    
+                                    try {
+                                        const newAlert = toAlert(payload);
+                                        console.log('Normalized alert:', newAlert);
+                                        
+                                        // Validate that we have valid coordinates
+                                        if (!newAlert || !Number.isFinite(newAlert.lat) || !Number.isFinite(newAlert.lon)) {
+                                            console.warn('Invalid alert coordinates:', newAlert);
+                                            return;
+                                        }
+                                        
+                                        setAlerts(prev => [newAlert, ...prev].slice(0, 50));
+                                        setLastUpdate(new Date());
+                                        playAlertSound();
+                                        setSelectedAlert(prev => prev || newAlert);
+                                        
+                                        console.log('✅ Alert processed successfully');
+                                    } catch (e) {
+                                        console.error('Error processing SOS alert:', e);
+                                    }
+                                });
+                            });
+                            
+                        } else {
+                            console.log('❌ Socket.IO not available');
+                            setConnectionError('Socket.IO library not loaded');
+                        }
+                    } catch (error) {
+                        console.error('❌ Socket initialization error:', error);
+                        setConnectionError('Socket initialization failed');
+                    }
+                };
+                
+                initializeSocket();
+                
+                return () => {
+                    if (socketRef.current) {
+                        console.log('Disconnecting from server...');
+                        socketRef.current.disconnect();
+                    }
+                };
+            }, []);
+            
+            const handleAlertClick = (alert) => {
+                setSelectedAlert(alert);
+            };
+            
+            return (
+                <div className="h-screen flex flex-col animate-fade-in">
+                    <Header 
+                        isConnected={isConnected} 
+                        alertCount={alerts.length}
+                        lastUpdate={lastUpdate}
+                    />
+                    
+                    {connectionError && (
+                        <div className="bg-red-900/20 border border-red-500/50 text-red-300 px-4 py-2 text-sm">
+                            ⚠️ Connection Error: {connectionError}
+                        </div>
+                    )}
+                    
+                    <div className="flex-1 flex overflow-hidden">
+                        <div className="w-1/3 min-w-[400px]">
+                            <LiveFeed 
+                                alerts={alerts} 
+                                onAlertClick={handleAlertClick}
+                                isConnected={isConnected}
+                            />
+                        </div>
+                        
+                        <div className="flex-1 p-6">
+                            <MapView selectedAlert={selectedAlert} />
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
