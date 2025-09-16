@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vortex SOS Admin Dashboard</title>
+    <title>Vortex SOS - Emergency Response Platform</title>
+
     <!-- React and Babel for JSX compilation -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -22,7 +24,7 @@
                     colors: {
                         'dark': {
                             50: '#f8fafc',
-                            100: '#f1f5f9',
+                            100: '#f1f5f9', 
                             200: '#e2e8f0',
                             300: '#cbd5e1',
                             400: '#94a3b8',
@@ -33,114 +35,119 @@
                             900: '#0f172a',
                             950: '#020617'
                         },
+                        'primary': {
+                            50: '#eff6ff',
+                            100: '#dbeafe', 
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a'
+                        },
                         'accent': {
-                            50: '#fdf4ff',
-                            100: '#fae8ff',
-                            200: '#f5d0fe',
-                            300: '#f0abfc',
-                            400: '#e879f9',
-                            500: '#d946ef',
-                            600: '#c026d3',
-                            700: '#a21caf',
-                            800: '#86198f',
-                            900: '#701a75'
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4', 
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a'
                         }
                     },
                     animation: {
                         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
                         'slide-up': 'slide-up 0.3s ease-out',
+                        'slide-down': 'slide-down 0.3s ease-out',
                         'fade-in': 'fade-in 0.5s ease-out',
-                        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite'
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient': 'gradient 15s ease infinite',
+                        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+                        'bounce-gentle': 'bounce-gentle 2s ease-in-out infinite'
                     },
                     keyframes: {
                         'pulse-glow': {
-                            '0%, 100%': { boxShadow: '0 0 20px rgba(217, 70, 239, 0.4)' },
-                            '50%': { boxShadow: '0 0 30px rgba(217, 70, 239, 0.6)' }
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.4)' },
+                            '50%': { boxShadow: '0 0 30px rgba(59, 130, 246, 0.6)' }
                         },
                         'slide-up': {
                             '0%': { transform: 'translateY(10px)', opacity: '0' },
                             '100%': { transform: 'translateY(0)', opacity: '1' }
                         },
+                        'slide-down': {
+                            '0%': { transform: 'translateY(-10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
                         'fade-in': {
                             '0%': { opacity: '0' },
                             '100%': { opacity: '1' }
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        'gradient': {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' }
+                        },
+                        'bounce-gentle': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' }
                         }
                     }
                 }
             }
         }
     </script>
+
     <!-- Socket.IO Client Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
-    <!-- Leaflet.js for the interactive map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Modern Fonts from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #334155 100%);
             background-attachment: fixed;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+
         /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.3); }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(45deg, #3b82f6, #14b8a6);
+            border-radius: 3px; 
         }
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.3);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(217, 70, 239, 0.3);
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(217, 70, 239, 0.5);
-        }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(45deg, #2563eb, #0d9488); }
+
         /* Glass morphism effect */
         .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
         .glass-dark {
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        /* Map styling */
-        .leaflet-container {
-            height: 100% !important;
-            width: 100% !important;
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .leaflet-tile-pane {
-            filter: hue-rotate(200deg) saturate(0.8) brightness(0.7) contrast(1.2);
-        }
-        /* Alert pulse animation */
-        @keyframes alert-pulse {
-            0%, 100% { 
-                transform: scale(1);
-                box-shadow: 0 0 20px rgba(217, 70, 239, 0.4);
-            }
-            50% { 
-                transform: scale(1.02);
-                box-shadow: 0 0 30px rgba(217, 70, 239, 0.6);
-            }
-        }
-        .alert-new {
-            animation: alert-pulse 2s ease-in-out 3;
-        }
+
         /* Status indicator */
         .status-online {
             position: relative;
@@ -152,78 +159,375 @@
             right: -2px;
             width: 12px;
             height: 12px;
-            background: #10b981;
+            background: linear-gradient(45deg, #10b981, #14b8a6);
             border-radius: 50%;
             border: 2px solid #0f172a;
             animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
         }
+
         /* Loading spinner */
         .spinner {
-            border: 2px solid rgba(217, 70, 239, 0.1);
+            border: 3px solid rgba(59, 130, 246, 0.1);
             border-radius: 50%;
-            border-top: 2px solid #d946ef;
-            width: 20px;
-            height: 20px;
+            border-top: 3px solid #3b82f6;
+            width: 24px;
+            height: 24px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Custom marker styles */
-        .sos-marker {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #d946ef, #f43f5e);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-            box-shadow: 0 4px 20px rgba(217, 70, 239, 0.6);
-            animation: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+        /* Alert animations */
+        .alert-new {
+            animation: alert-pulse 2s ease-in-out 3;
         }
-        /* Font Awesome icon fixes */
-        .fa-icon {
-            color: white;
-            font-size: 1.5rem;
+        @keyframes alert-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+            }
+            50% { 
+                transform: scale(1.02);
+                box-shadow: 0 0 40px rgba(59, 130, 246, 0.7);
+            }
         }
-        .fa-icon-sm {
-            font-size: 1rem;
-        }
-        .fa-icon-lg {
-            font-size: 2rem;
-        }
-        .fa-icon-purple {
-            color: #d946ef;
-        }
-        .fa-icon-green {
-            color: #10b981;
-        }
-        .fa-icon-slate {
-            color: #64748b;
-        }
-        /* Map container fix */
-        #map {
+
+        /* Map container styling */
+        .map-container {
             height: 100% !important;
             min-height: 500px;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Animated background for auth pages */
+        .animated-bg {
+            background: linear-gradient(-45deg, #0f172a, #1e293b, #3b82f6, #14b8a6);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        /* Live location indicator */
+        .live-location-pulse {
+            animation: live-pulse 2s infinite;
+        }
+        @keyframes live-pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
+        /* Enhanced button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+        }
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(20, 184, 166, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Card enhancements */
+        .enhanced-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .enhanced-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        /* Tab styling */
+        .tab-button {
+            position: relative;
+            z-index: 10;
+        }
+        .tab-button.active {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+        .tab-button:not(.active) {
+            background: rgba(51, 65, 85, 0.8);
+        }
+
+        /* Geofence specific styles */
+        .geofence-item {
+            transition: all 0.3s ease;
+        }
+        .geofence-item:hover {
+            transform: translateX(5px);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .geofence-active {
+            border-left: 4px solid #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .geofence-inactive {
+            border-left: 4px solid #6b7280;
+            background: rgba(107, 114, 128, 0.1);
+        }
+
+        /* Drawing mode indicator */
+        .drawing-mode {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* Toggle switch */
+        .toggle-switch {
+            width: 48px;
+            height: 24px;
+            background-color: #374151;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .toggle-knob {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(24px);
+        }
+
+        /* Panel content styling */
+        .panel-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fix for tab content */
+        .tab-content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Notification styling */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .success-banner {
+            background: linear-gradient(90deg, #059669, #047857);
+            border: 1px solid rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .error-banner {
+            background: linear-gradient(90deg, #dc2626, #b91c1c);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            color: white;
+        }
+
+        .info-banner {
+            background: linear-gradient(90deg, #0284c7, #0369a1);
+            border: 1px solid rgba(2, 132, 199, 0.3);
+            color: white;
         }
     </style>
 </head>
+
 <body class="bg-dark-950 text-slate-100 overflow-hidden">
     <div id="root"></div>
+
+    <!-- Google Maps Script with Drawing Libraries -->
+    <script>
+        // Google Maps configuration with your API key
+        const GOOGLE_MAPS_API_KEY = 'AIzaSyCBUkiIUpOgDeiUKg-kgFVfveCDApfvkf8';
+
+        // Global variables for Google Maps
+        window.googleMapsLoaded = false;
+        window.googleMapsError = false;
+        window.mapProvider = 'google';
+
+        // Google Maps callback functions
+        window.initGoogleMaps = function() {
+            console.log('✅ Google Maps API loaded successfully with Drawing Libraries');
+            window.googleMapsLoaded = true;
+            window.dispatchEvent(new CustomEvent('googleMapsReady'));
+        };
+
+        window.gm_authFailure = function() {
+            console.error('❌ Google Maps authentication failed - Check your API key');
+            window.googleMapsError = true;
+            window.dispatchEvent(new CustomEvent('googleMapsError', { 
+                detail: { error: 'Authentication failed. Please check your API key and billing settings.' } 
+            }));
+        };
+
+        // Load Google Maps script with Drawing and Geometry libraries
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=drawing,geometry,places&callback=initGoogleMaps`;
+        script.onerror = function() {
+            console.error('❌ Google Maps script failed to load');
+            window.googleMapsError = true;
+            window.dispatchEvent(new CustomEvent('googleMapsError', { 
+                detail: { error: 'Failed to load Google Maps script. Check your internet connection.' } 
+            }));
+        };
+        document.head.appendChild(script);
+
+        // Timeout fallback
+        setTimeout(() => {
+            if (!window.googleMapsLoaded && !window.googleMapsError) {
+                console.warn('⚠️ Google Maps loading timeout');
+                window.googleMapsError = true;
+                window.dispatchEvent(new CustomEvent('googleMapsError', { 
+                    detail: { error: 'Google Maps loading timeout. Please refresh the page.' } 
+                }));
+            }
+        }, 15000);
+    </script>
+
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-        
-        // Configuration - Updated to your Render server
+        const { useState, useEffect, useRef, useCallback } = React;
+
+        // Configuration
         const SERVER_URL = "https://vortex-safety-server.onrender.com";
-        const NAMESPACE = ''; // Set to '/sos' if your backend uses a namespace
-        
+        const NAMESPACE = '';
+
+        // Geofence types and priorities
+        const GEOFENCE_TYPES = {
+            RESTRICTED: { name: 'Restricted Zone', color: '#ef4444', priority: 'high' },
+            SAFE: { name: 'Safe Zone', color: '#10b981', priority: 'low' },
+            MONITORING: { name: 'Monitoring Zone', color: '#f59e0b', priority: 'medium' },
+            EMERGENCY: { name: 'Emergency Zone', color: '#dc2626', priority: 'critical' }
+        };
+
+        const ALERT_PRIORITIES = {
+            low: { name: 'Low Priority', color: '#6b7280' },
+            medium: { name: 'Medium Priority', color: '#f59e0b' },
+            high: { name: 'High Priority', color: '#ef4444' },
+            critical: { name: 'Critical Priority', color: '#dc2626' }
+        };
+
+        // Get user's current location
+        const useCurrentLocation = () => {
+            const [location, setLocation] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+
+            useEffect(() => {
+                if (!navigator.geolocation) {
+                    setError("Geolocation is not supported by this browser.");
+                    setLoading(false);
+                    return;
+                }
+
+                const options = {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 60000
+                };
+
+                const successCallback = (position) => {
+                    setLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        accuracy: position.coords.accuracy,
+                        timestamp: Date.now()
+                    });
+                    setLoading(false);
+                    setError(null);
+                };
+
+                const errorCallback = (error) => {
+                    setError("Unable to get your location: " + error.message);
+                    setLoading(false);
+                    // Set default location (Delhi)
+                    setLocation({
+                        lat: 28.6139,
+                        lng: 77.2090,
+                        accuracy: null,
+                        timestamp: Date.now()
+                    });
+                };
+
+                navigator.geolocation.getCurrentPosition(successCallback, errorCallback, options);
+
+                // Watch position for live updates
+                const watchId = navigator.geolocation.watchPosition(
+                    successCallback,
+                    errorCallback,
+                    options
+                );
+
+                return () => navigator.geolocation.clearWatch(watchId);
+            }, []);
+
+            return { location, loading, error };
+        };
+
         // Normalizer helper to handle different payload formats from server
         const toAlert = (data) => {
             if (!data) return null;
-            
+
             return {
                 id: Date.now() + Math.random(),
                 user: data?.user || data?.name || data?.sender || 'Anonymous',
@@ -233,105 +537,410 @@
                 timestamp: data?.timestamp || data?.time || data?.createdAt || new Date().toISOString()
             };
         };
-        
-        // Utility function to play alert sound with better error handling
+
+        // Sound utility functions
         const playAlertSound = () => {
-            // Check if user has interacted with the page first
-            if (document.hasStorageAccess || document.hasFocus()) {
-                try {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    
-                    // Check if audio context is allowed
-                    if (audioContext.state === 'suspended') {
-                        audioContext.resume().then(() => {
-                            createSound(audioContext);
-                        }).catch(error => {
-                            console.log('Audio context resume failed:', error);
-                        });
-                    } else {
-                        createSound(audioContext);
-                    }
-                } catch (error) {
-                    console.log('Audio not available:', error);
-                    // Fallback to simple beep if available
-                    try {
-                        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAT');
-                        audio.play().catch(() => {});
-                    } catch (e) {
-                        console.log('Fallback audio failed:', e);
-                    }
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume().then(() => createSound(audioContext));
+                } else {
+                    createSound(audioContext);
                 }
+            } catch (error) {
+                console.log('Audio not available:', error);
             }
         };
-        
+
         const createSound = (audioContext) => {
             try {
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                
+
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
-                
+
                 oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
-                
+                oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.2);
+
                 gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+
                 oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.5);
+                oscillator.stop(audioContext.currentTime + 0.8);
             } catch (error) {
                 console.log('Sound creation failed:', error);
             }
         };
-        
+
+        // Notification Component
+        const NotificationToast = ({ notification, onClose }) => {
+            useEffect(() => {
+                if (notification) {
+                    const timer = setTimeout(() => {
+                        onClose();
+                    }, 4000);
+                    return () => clearTimeout(timer);
+                }
+            }, [notification, onClose]);
+
+            if (!notification) return null;
+
+            return (
+                <div className={`notification glass p-4 rounded-xl animate-slide-down ${
+                    notification.type === 'success' ? 'success-banner' :
+                    notification.type === 'error' ? 'error-banner' :
+                    'info-banner'
+                }`}>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                            <i className={`fas ${
+                                notification.type === 'success' ? 'fa-check-circle' :
+                                notification.type === 'error' ? 'fa-exclamation-circle' :
+                                'fa-info-circle'
+                            }`}></i>
+                            <span className="text-sm font-medium">{notification.message}</span>
+                        </div>
+                        <button 
+                            onClick={onClose}
+                            className="text-white/70 hover:text-white transition-colors"
+                        >
+                            <i className="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Authentication Component
+        const AuthPage = ({ onLogin }) => {
+            const [isLogin, setIsLogin] = useState(true);
+            const [formData, setFormData] = useState({
+                email: '',
+                password: '',
+                confirmPassword: '',
+                fullName: ''
+            });
+            const [isLoading, setIsLoading] = useState(false);
+            const [error, setError] = useState('');
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setError('');
+                setIsLoading(true);
+
+                if (!formData.email || !formData.password) {
+                    setError('Please fill in all required fields');
+                    setIsLoading(false);
+                    return;
+                }
+
+                if (!isLogin) {
+                    if (formData.password !== formData.confirmPassword) {
+                        setError('Passwords do not match');
+                        setIsLoading(false);
+                        return;
+                    }
+                    if (!formData.fullName) {
+                        setError('Please enter your full name');
+                        setIsLoading(false);
+                        return;
+                    }
+                }
+
+                setTimeout(() => {
+                    if (formData.email.includes('@') && formData.password.length >= 6) {
+                        onLogin({
+                            email: formData.email,
+                            name: formData.fullName || formData.email.split('@')[0],
+                            role: 'admin'
+                        });
+                    } else {
+                        setError(isLogin ? 'Invalid credentials' : 'Please enter valid email and password (min 6 characters)');
+                    }
+                    setIsLoading(false);
+                }, 1200);
+            };
+
+            const handleInputChange = (e) => {
+                setFormData({ ...formData, [e.target.name]: e.target.value });
+                setError('');
+            };
+
+            return (
+                <div className="min-h-screen animated-bg flex items-center justify-center p-6">
+                    <div className="w-full max-w-md">
+                        <div className="text-center mb-8">
+                            <div className="w-24 h-24 bg-gradient-to-br from-primary-500 to-accent-500 rounded-3xl flex items-center justify-center mx-auto mb-6 animate-float shadow-2xl">
+                                <i className="fas fa-shield-alt text-white text-4xl"></i>
+                            </div>
+                            <h1 className="font-display text-5xl font-bold bg-gradient-to-r from-primary-400 via-accent-400 to-primary-600 bg-clip-text text-transparent mb-3">
+                                Vortex SOS
+                            </h1>
+                            <p className="text-slate-300 text-xl font-medium">Emergency Response Platform</p>
+                        </div>
+
+                        <div className="glass-dark rounded-3xl p-8 animate-fade-in enhanced-card">
+                            <div className="flex mb-8 bg-slate-800/50 rounded-xl p-1">
+                                <button
+                                    onClick={() => setIsLogin(true)}
+                                    className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-300 ${
+                                        isLogin 
+                                            ? 'btn-primary text-white shadow-lg' 
+                                            : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                                    }`}
+                                >
+                                    Sign In
+                                </button>
+                                <button
+                                    onClick={() => setIsLogin(false)}
+                                    className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-300 ${
+                                        !isLogin 
+                                            ? 'btn-primary text-white shadow-lg' 
+                                            : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                                    }`}
+                                >
+                                    Sign Up
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                {!isLogin && (
+                                    <div>
+                                        <label className="block text-slate-300 text-sm font-semibold mb-3">
+                                            Full Name
+                                        </label>
+                                        <div className="relative">
+                                            <i className="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-400"></i>
+                                            <input
+                                                type="text"
+                                                name="fullName"
+                                                value={formData.fullName}
+                                                onChange={handleInputChange}
+                                                className="w-full pl-12 pr-4 py-4 glass rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300"
+                                                placeholder="Enter your full name"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div>
+                                    <label className="block text-slate-300 text-sm font-semibold mb-3">
+                                        Email Address
+                                    </label>
+                                    <div className="relative">
+                                        <i className="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-400"></i>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                            className="w-full pl-12 pr-4 py-4 glass rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300"
+                                            placeholder="Enter your email"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-slate-300 text-sm font-semibold mb-3">
+                                        Password
+                                    </label>
+                                    <div className="relative">
+                                        <i className="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-400"></i>
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleInputChange}
+                                            className="w-full pl-12 pr-4 py-4 glass rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300"
+                                            placeholder="Enter your password"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                {!isLogin && (
+                                    <div>
+                                        <label className="block text-slate-300 text-sm font-semibold mb-3">
+                                            Confirm Password
+                                        </label>
+                                        <div className="relative">
+                                            <i className="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-400"></i>
+                                            <input
+                                                type="password"
+                                                name="confirmPassword"
+                                                value={formData.confirmPassword}
+                                                onChange={handleInputChange}
+                                                className="w-full pl-12 pr-4 py-4 glass rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300"
+                                                placeholder="Confirm your password"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {error && (
+                                    <div className="glass bg-red-500/10 border-red-500/30 text-red-300 p-4 rounded-xl flex items-center space-x-3 animate-slide-up">
+                                        <i className="fas fa-exclamation-triangle text-red-400"></i>
+                                        <span>{error}</span>
+                                    </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="w-full py-4 btn-primary text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3"
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <div className="spinner"></div>
+                                            <span>Processing...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className={`fas ${isLogin ? 'fa-sign-in-alt' : 'fa-user-plus'}`}></i>
+                                            <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
+                                        </>
+                                    )}
+                                </button>
+                            </form>
+
+                            {isLogin && (
+                                <div className="mt-6 text-center">
+                                    <a href="#" className="text-primary-400 hover:text-primary-300 text-sm font-medium transition-colors">
+                                        Forgot your password?
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="mt-8 text-center text-slate-400 text-sm">
+                            <p className="font-medium">Secure Emergency Response System</p>
+                            <p className="mt-1">© 2024 Vortex SOS. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         // Header Component
-        const Header = ({ isConnected, alertCount, lastUpdate }) => {
+        const Header = ({ isConnected, alertCount, lastUpdate, user, onLogout, currentLocation, mapsLoaded, mapError, geofenceCount, activeDrawingMode }) => {
             return (
                 <header className="glass-dark p-6 flex justify-between items-center z-20 border-b border-white/10">
                     <div className="flex items-center space-x-6">
                         <div className="relative">
-                            <div className="w-12 h-12 bg-gradient-to-br from-accent-500 to-rose-500 rounded-xl flex items-center justify-center">
-                                <i className="fas fa-shield-halved fa-icon text-white"></i>
+                            <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg">
+                                <i className="fas fa-shield-alt text-white text-xl"></i>
                             </div>
                             {isConnected && <div className="status-online"></div>}
                         </div>
                         <div>
-                            <h1 className="font-display text-3xl font-bold bg-gradient-to-r from-accent-400 via-accent-500 to-rose-400 bg-clip-text text-transparent">
+                            <h1 className="font-display text-3xl font-bold bg-gradient-to-r from-primary-400 via-accent-400 to-primary-600 bg-clip-text text-transparent">
                                 Vortex SOS
                             </h1>
-                            <p className="text-slate-400 text-sm font-medium">Emergency Response Center</p>
+                            <p className="text-slate-400 text-sm font-medium">Emergency Response Platform</p>
                         </div>
                     </div>
-                    
-                    <div className="flex items-center space-x-6">
-                        <div className="glass px-4 py-2 rounded-xl">
-                            <div className="flex items-center space-x-2">
-                                <span className="text-slate-300 text-sm">Total Alerts:</span>
-                                <span className="font-mono font-bold text-accent-400">{alertCount}</span>
+
+                    <div className="flex items-center space-x-4">
+                        {activeDrawingMode && (
+                            <div className="glass px-4 py-3 rounded-xl enhanced-card drawing-mode">
+                                <div className="flex items-center space-x-3">
+                                    <i className="fas fa-draw-polygon text-white"></i>
+                                    <div className="text-xs">
+                                        <div className="text-white font-semibold">Drawing Mode</div>
+                                        <div className="text-white/80 text-xs">{activeDrawingMode}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="glass px-4 py-3 rounded-xl enhanced-card">
+                            <div className="flex items-center space-x-3">
+                                <i className="fas fa-layer-group text-accent-400"></i>
+                                <div className="text-xs">
+                                    <div className="text-slate-300 font-medium">Geofences</div>
+                                    <div className="font-mono font-bold text-accent-400 text-lg">{geofenceCount}</div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div className="glass px-4 py-3 rounded-xl">
+
+                        <div className="glass px-4 py-3 rounded-xl enhanced-card">
+                            <div className="flex items-center space-x-3">
+                                <i className={`fas fa-map ${mapsLoaded ? 'text-green-400' : 'text-red-400'}`}></i>
+                                <div className="text-xs">
+                                    <div className="text-slate-300 font-medium">Google Maps</div>
+                                    <div className={`text-xs ${mapError ? 'text-red-400' : 'text-green-400'}`}>
+                                        {mapError ? 'Error' : mapsLoaded ? 'Ready' : 'Loading...'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {currentLocation && (
+                            <div className="glass px-4 py-3 rounded-xl enhanced-card">
+                                <div className="flex items-center space-x-3">
+                                    <div className="w-3 h-3 rounded-full bg-accent-400 live-location-pulse"></div>
+                                    <div className="text-xs">
+                                        <div className="text-accent-400 font-semibold">Live Location</div>
+                                        <div className="text-slate-400">
+                                            {currentLocation.lat.toFixed(4)}, {currentLocation.lng.toFixed(4)}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="glass px-4 py-3 rounded-xl enhanced-card">
+                            <div className="flex items-center space-x-3">
+                                <i className="fas fa-exclamation-triangle text-amber-400"></i>
+                                <div className="text-xs">
+                                    <div className="text-slate-300 font-medium">Active Alerts</div>
+                                    <div className="font-mono font-bold text-primary-400 text-lg">{alertCount}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="glass px-4 py-3 rounded-xl enhanced-card">
                             <div className="flex items-center space-x-3">
                                 <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-500'}`}></div>
-                                <div className="text-right">
-                                    <span className="font-semibold text-sm">
-                                        {isConnected ? 'LIVE' : 'OFFLINE'}
-                                    </span>
+                                <div className="text-xs">
+                                    <div className="font-semibold text-white">
+                                        {isConnected ? 'CONNECTED' : 'OFFLINE'}
+                                    </div>
                                     {lastUpdate && (
-                                        <div className="text-xs text-slate-400">
-                                            Last: {new Date(lastUpdate).toLocaleTimeString()}
+                                        <div className="text-slate-400">
+                                            {new Date(lastUpdate).toLocaleTimeString()}
                                         </div>
                                     )}
                                 </div>
                             </div>
                         </div>
+
+                        <div className="glass px-4 py-3 rounded-xl flex items-center space-x-3 enhanced-card">
+                            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full flex items-center justify-center">
+                                <i className="fas fa-user text-white"></i>
+                            </div>
+                            <div>
+                                <div className="text-sm font-semibold text-white">{user.name}</div>
+                                <div className="text-xs text-slate-400 capitalize">{user.role}</div>
+                            </div>
+                            <button
+                                onClick={onLogout}
+                                className="ml-3 text-slate-400 hover:text-red-400 transition-colors p-2 hover:bg-red-500/10 rounded-lg"
+                                title="Logout"
+                            >
+                                <i className="fas fa-sign-out-alt"></i>
+                            </button>
+                        </div>
                     </div>
                 </header>
             );
         };
-        
+
         // Alert Item Component
         const AlertItem = ({ alert, isLatest, onClick }) => {
             const time = new Date(alert.timestamp).toLocaleTimeString([], { 
@@ -339,111 +948,245 @@
                 minute: '2-digit', 
                 second: '2-digit' 
             });
-            
+
             const timeAgo = React.useMemo(() => {
                 const now = new Date();
                 const alertTime = new Date(alert.timestamp);
                 const diffMinutes = Math.floor((now - alertTime) / 60000);
-                
+
                 if (diffMinutes < 1) return 'Just now';
                 if (diffMinutes < 60) return `${diffMinutes}m ago`;
                 const diffHours = Math.floor(diffMinutes / 60);
                 return `${diffHours}h ago`;
             }, [alert.timestamp]);
-            
+
             return (
                 <div 
-                    className={`glass rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:scale-[1.02] group animate-slide-up
-                        ${isLatest ? 'alert-new bg-gradient-to-r from-accent-500/10 to-rose-500/10 border-accent-500/50' : 'hover:border-accent-500/30'}`}
+                    className={`glass rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:scale-[1.01] group animate-slide-up enhanced-card
+                        ${isLatest ? 'alert-new bg-gradient-to-r from-primary-500/10 to-accent-500/10 border-primary-500/30' : ''}`}
                     onClick={() => onClick(alert)}
                 >
-                    <div className="flex justify-between items-start mb-3">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-accent-500 to-rose-500 rounded-full flex items-center justify-center">
-                                <i className="fas fa-user text-white" style={{ fontSize: '1.2rem' }}></i>
+                    <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                                <i className="fas fa-exclamation text-white text-lg"></i>
                             </div>
                             <div>
-                                <span className="font-semibold text-lg text-white">
+                                <span className="font-semibold text-lg text-white block">
                                     {alert.user}
                                 </span>
-                                <div className="text-xs text-slate-400">{timeAgo}</div>
+                                <div className="text-sm text-slate-400 font-medium">{timeAgo}</div>
                             </div>
                         </div>
                         <div className="text-right">
                             <div className="text-sm font-mono text-slate-300">{time}</div>
                             {isLatest && (
-                                <div className="inline-flex items-center space-x-1 bg-accent-500/20 text-accent-300 text-xs px-2 py-1 rounded-full mt-1">
-                                    <div className="w-2 h-2 bg-accent-400 rounded-full animate-ping"></div>
+                                <div className="inline-flex items-center space-x-2 bg-primary-500/20 text-primary-300 text-xs px-3 py-1 rounded-full mt-2 font-semibold">
+                                    <div className="w-2 h-2 bg-primary-400 rounded-full animate-ping"></div>
                                     <span>NEW</span>
                                 </div>
                             )}
                         </div>
                     </div>
-                    
-                    <p className="text-slate-300 leading-relaxed mb-3">{alert.message}</p>
-                    
+
+                    <p className="text-slate-200 leading-relaxed mb-4 font-medium">{alert.message}</p>
+
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4 text-xs text-slate-400">
-                            <span className="flex items-center space-x-1">
-                                <i className="fas fa-map-pin" style={{ fontSize: '0.8rem' }}></i>
-                                <span>{alert.lat?.toFixed(4)}, {alert.lon?.toFixed(4)}</span>
-                            </span>
+                        <div className="flex items-center space-x-2 text-sm text-slate-400">
+                            <i className="fas fa-map-pin text-accent-400"></i>
+                            <span className="font-mono">{alert.lat?.toFixed(4)}, {alert.lon?.toFixed(4)}</span>
                         </div>
-                        <div className="text-xs text-accent-400 group-hover:text-accent-300 transition-colors">
-                            View on Map →
+                        <div className="text-sm text-primary-400 group-hover:text-primary-300 transition-colors font-medium">
+                            View Location →
                         </div>
                     </div>
                 </div>
             );
         };
-        
-        // Live Feed Component
-        const LiveFeed = ({ alerts, onAlertClick, isConnected }) => {
-            const feedRef = useRef(null);
-            const latestAlertId = alerts.length > 0 ? alerts[0].id : null;
-            
-            useEffect(() => {
-                if (feedRef.current && alerts.length > 0) {
-                    feedRef.current.scrollTop = 0;
-                }
-            }, [alerts]);
-            
+
+        // Geofence Violation Item Component
+        const GeofenceViolationItem = ({ violation, isLatest }) => {
+            const time = new Date(violation.timestamp).toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+
+            const timeAgo = React.useMemo(() => {
+                const now = new Date();
+                const violationTime = new Date(violation.timestamp);
+                const diffMinutes = Math.floor((now - violationTime) / 60000);
+
+                if (diffMinutes < 1) return 'Just now';
+                if (diffMinutes < 60) return `${diffMinutes}m ago`;
+                const diffHours = Math.floor(diffMinutes / 60);
+                return `${diffHours}h ago`;
+            }, [violation.timestamp]);
+
             return (
-                <div className="glass-dark h-full flex flex-col border-r border-white/10">
-                    <div className="p-6 border-b border-white/10">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-semibold text-white flex items-center space-x-3">
-                                <i className="fas fa-broadcast-tower fa-icon-purple"></i>
-                                <span>Live SOS Feed</span>
-                            </h2>
-                            {isConnected && (
-                                <div className="flex items-center space-x-2 text-green-400">
-                                    <div className="spinner"></div>
-                                    <span className="text-sm">Monitoring</span>
+                <div 
+                    className={`glass rounded-2xl p-5 transition-all duration-300 animate-slide-up enhanced-card
+                        ${isLatest ? 'alert-new bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-amber-500/30' : ''}`}
+                >
+                    <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                                <i className="fas fa-layer-group text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <span className="font-semibold text-lg text-white block">
+                                    Geofence Violation
+                                </span>
+                                <div className="text-sm text-slate-400 font-medium">{timeAgo}</div>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-sm font-mono text-slate-300">{time}</div>
+                            {isLatest && (
+                                <div className="inline-flex items-center space-x-2 bg-amber-500/20 text-amber-300 text-xs px-3 py-1 rounded-full mt-2 font-semibold">
+                                    <div className="w-2 h-2 bg-amber-400 rounded-full animate-ping"></div>
+                                    <span>NEW</span>
                                 </div>
                             )}
                         </div>
                     </div>
-                    
-                    <div ref={feedRef} className="flex-grow overflow-y-auto p-6">
-                        {alerts.length === 0 ? (
-                            <div className="text-center text-slate-500 pt-20 animate-fade-in">
-                                <div className="w-24 h-24 mx-auto mb-6 glass rounded-2xl flex items-center justify-center">
-                                    <i className="fas fa-satellite-dish animate-pulse text-slate-600" style={{ fontSize: '3rem' }}></i>
+
+                    <p className="text-slate-200 leading-relaxed mb-4 font-medium">
+                        {violation.user} {violation.action} geofence "{violation.geofenceName}"
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2 text-sm text-slate-400">
+                            <i className="fas fa-map-pin text-amber-400"></i>
+                            <span className="font-mono">{violation.lat?.toFixed(4)}, {violation.lon?.toFixed(4)}</span>
+                        </div>
+                        <div className="text-xs text-amber-400 font-medium">
+                            {ALERT_PRIORITIES[violation.priority]?.name || 'Medium Priority'}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Geofence Item Component
+        const GeofenceItem = ({ geofence, onEdit, onDelete, onToggle, onFocus }) => {
+            const typeConfig = GEOFENCE_TYPES[geofence.type] || GEOFENCE_TYPES.MONITORING;
+            const priorityConfig = ALERT_PRIORITIES[geofence.priority] || ALERT_PRIORITIES.medium;
+
+            return (
+                <div className={`glass rounded-xl p-4 mb-3 geofence-item transition-all duration-300 ${
+                    geofence.active ? 'geofence-active' : 'geofence-inactive'
+                }`}>
+                    <div className="flex justify-between items-start mb-3">
+                        <div className="flex items-center space-x-3">
+                            <div 
+                                className="w-4 h-4 rounded-full" 
+                                style={{ backgroundColor: typeConfig.color }}
+                            ></div>
+                            <div>
+                                <h4 className="font-semibold text-white text-sm">{geofence.name}</h4>
+                                <p className="text-xs text-slate-400">{typeConfig.name}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <div 
+                                className={`toggle-switch ${geofence.active ? 'active' : ''}`}
+                                onClick={() => onToggle(geofence.id)}
+                            >
+                                <div className="toggle-knob"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-slate-400 mb-3">
+                        <span>Priority: {priorityConfig.name}</span>
+                        <span>Shape: {geofence.shapeType || 'polygon'}</span>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                        <button
+                            onClick={() => onFocus(geofence)}
+                            className="flex-1 py-2 px-3 bg-primary-600 hover:bg-primary-700 text-white text-xs font-medium rounded-lg transition-colors"
+                        >
+                            <i className="fas fa-eye mr-1"></i>
+                            Focus
+                        </button>
+                        <button
+                            onClick={() => onEdit(geofence)}
+                            className="py-2 px-3 bg-accent-600 hover:bg-accent-700 text-white text-xs font-medium rounded-lg transition-colors"
+                        >
+                            <i className="fas fa-edit"></i>
+                        </button>
+                        <button
+                            onClick={() => onDelete(geofence.id)}
+                            className="py-2 px-3 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg transition-colors"
+                        >
+                            <i className="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Live Feed Component
+        const LiveFeed = ({ alerts, geofenceViolations, onAlertClick, isConnected }) => {
+            const feedRef = useRef(null);
+            const combinedFeed = [...alerts, ...geofenceViolations].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
+
+            useEffect(() => {
+                if (feedRef.current && combinedFeed.length > 0) {
+                    feedRef.current.scrollTop = 0;
+                }
+            }, [combinedFeed]);
+
+            return (
+                <div className="panel-content glass-dark">
+                    <div className="p-6 border-b border-white/10">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-xl font-semibold text-white flex items-center space-x-3">
+                                <i className="fas fa-broadcast-tower text-primary-400"></i>
+                                <span>Live Feed</span>
+                            </h2>
+                            {isConnected && (
+                                <div className="flex items-center space-x-2 text-green-400">
+                                    <div className="spinner"></div>
+                                    <span className="text-sm font-medium">Live</span>
                                 </div>
-                                <h3 className="font-semibold text-lg mb-2">System Ready</h3>
-                                <p className="text-sm">Monitoring for SOS signals...</p>
-                                <p className="text-xs text-slate-600 mt-2">Connected to: {SERVER_URL}</p>
+                            )}
+                        </div>
+                    </div>
+
+                    <div ref={feedRef} className="flex-grow overflow-y-auto p-6">
+                        {combinedFeed.length === 0 ? (
+                            <div className="text-center text-slate-500 pt-20 animate-fade-in">
+                                <div className="w-24 h-24 mx-auto mb-6 glass rounded-3xl flex items-center justify-center">
+                                    <i className="fas fa-satellite-dish animate-pulse text-slate-600 text-4xl"></i>
+                                </div>
+                                <h3 className="font-semibold text-xl mb-3 text-slate-400">System Active</h3>
+                                <p className="text-sm text-slate-500">Monitoring for emergency alerts and geofence violations...</p>
+                                <div className="mt-4 text-xs text-slate-600">
+                                    Connected to: {SERVER_URL}
+                                </div>
                             </div>
                         ) : (
                             <div className="space-y-4">
-                                {alerts.map((alert, index) => (
-                                    <AlertItem 
-                                        key={alert.id} 
-                                        alert={alert}
-                                        isLatest={alert.id === latestAlertId}
-                                        onClick={onAlertClick}
-                                    />
+                                {combinedFeed.map((item, index) => (
+                                    item.type === 'geofence_violation' ? (
+                                        <GeofenceViolationItem 
+                                            key={item.id} 
+                                            violation={item}
+                                            isLatest={index === 0}
+                                        />
+                                    ) : (
+                                        <AlertItem 
+                                            key={item.id} 
+                                            alert={item} 
+                                            isLatest={index === 0}
+                                            onClick={onAlertClick}
+                                        />
+                                    )
                                 ))}
                             </div>
                         )}
@@ -451,290 +1194,1014 @@
                 </div>
             );
         };
-        
-        // Map View Component
-        const MapView = ({ selectedAlert }) => {
-            const mapRef = useRef(null);
-            const markerRef = useRef(null);
-            const mapContainerRef = useRef(null);
-            
-            useEffect(() => {
-                // Initialize map with a delay to ensure container is ready
-                const initializeMap = () => {
-                    if (!mapRef.current && mapContainerRef.current) {
-                        try {
-                            mapRef.current = L.map(mapContainerRef.current, { 
-                                zoomControl: false,
-                                attributionControl: true
-                            }).setView([20.5937, 78.9629], 5);
-                            
-                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '© OpenStreetMap contributors',
-                                maxZoom: 18
-                            }).addTo(mapRef.current);
-                            
-                            L.control.zoom({ position: 'topright' }).addTo(mapRef.current);
-                            
-                            // Invalidate size after a short delay
-                            setTimeout(() => {
-                                if (mapRef.current) {
-                                    mapRef.current.invalidateSize();
-                                }
-                            }, 100);
-                        } catch (error) {
-                            console.error('Map initialization failed:', error);
-                        }
-                    }
-                };
-                
-                // Use a timeout to ensure the container is rendered
-                const timer = setTimeout(initializeMap, 100);
-                
-                return () => clearTimeout(timer);
-            }, []);
-            
-            useEffect(() => {
-                if (mapRef.current && selectedAlert && selectedAlert.lat && selectedAlert.lon) {
-                    const { lat, lon } = selectedAlert;
-                    const latLng = [lat, lon];
-                    
-                    try {
-                        mapRef.current.flyTo(latLng, 15, { 
-                            animate: true, 
-                            duration: 2,
-                            easeLinearity: 0.1
-                        });
-                        
-                        // Remove existing marker
-                        if (markerRef.current) {
-                            mapRef.current.removeLayer(markerRef.current);
-                        }
-                        
-                        // Create custom icon
-                        const customIcon = L.divIcon({
-                            className: 'custom-sos-marker',
-                            html: `<div class="sos-marker"><i class="fas fa-exclamation-triangle"></i></div>`,
-                            iconSize: [40, 40],
-                            iconAnchor: [20, 20]
-                        });
-                        
-                        markerRef.current = L.marker(latLng, { icon: customIcon }).addTo(mapRef.current);
-                        
-                        const popupContent = `
-                            <div class="p-3 min-w-[200px]">
-                                <h3 class="font-bold text-lg mb-2">🚨 Emergency Alert</h3>
-                                <p class="mb-2"><strong>From:</strong> ${selectedAlert.user}</p>
-                                <p class="mb-2"><strong>Message:</strong> ${selectedAlert.message}</p>
-                                <p class="text-sm text-gray-600">
-                                    <strong>Time:</strong> ${new Date(selectedAlert.timestamp).toLocaleString()}
-                                </p>
-                                <p class="text-sm text-gray-600">
-                                    <strong>Location:</strong> ${lat.toFixed(4)}, ${lon.toFixed(4)}
-                                </p>
-                            </div>
-                        `;
-                        
-                        markerRef.current.bindPopup(popupContent, {
-                            maxWidth: 300,
-                            className: 'custom-popup'
-                        }).openPopup();
-                    } catch (error) {
-                        console.error('Map update failed:', error);
-                    }
+
+        // Geofence Panel Component
+        const GeofencePanel = ({ 
+            geofences, 
+            onCreateGeofence, 
+            onEditGeofence, 
+            onDeleteGeofence, 
+            onToggleGeofence, 
+            onFocusGeofence, 
+            drawingMode, 
+            onDrawingModeChange 
+        }) => {
+            const [showCreateModal, setShowCreateModal] = useState(false);
+            const [editingGeofence, setEditingGeofence] = useState(null);
+            const [newGeofence, setNewGeofence] = useState({
+                name: '',
+                type: 'MONITORING',
+                priority: 'medium',
+                alertOnEntry: true,
+                alertOnExit: false,
+                active: true
+            });
+
+            const handleCreateGeofence = () => {
+                if (newGeofence.name.trim()) {
+                    onCreateGeofence(newGeofence);
+                    setNewGeofence({
+                        name: '',
+                        type: 'MONITORING',
+                        priority: 'medium',
+                        alertOnEntry: true,
+                        alertOnExit: false,
+                        active: true
+                    });
+                    setShowCreateModal(false);
                 }
-            }, [selectedAlert]);
-            
+            };
+
+            const handleEditGeofence = (geofence) => {
+                setEditingGeofence(geofence);
+                setNewGeofence({ 
+                    name: geofence.name,
+                    type: geofence.type,
+                    priority: geofence.priority,
+                    alertOnEntry: geofence.alertOnEntry,
+                    alertOnExit: geofence.alertOnExit,
+                    active: geofence.active
+                });
+                setShowCreateModal(true);
+            };
+
+            const handleUpdateGeofence = () => {
+                if (editingGeofence && newGeofence.name.trim()) {
+                    onEditGeofence(editingGeofence.id, newGeofence);
+                    setEditingGeofence(null);
+                    setNewGeofence({
+                        name: '',
+                        type: 'MONITORING',
+                        priority: 'medium',
+                        alertOnEntry: true,
+                        alertOnExit: false,
+                        active: true
+                    });
+                    setShowCreateModal(false);
+                }
+            };
+
             return (
-                <div className="h-full w-full glass-dark rounded-2xl overflow-hidden relative">
-                    {!selectedAlert && (
-                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-dark-950/50 backdrop-blur-sm">
-                            <div className="text-center">
-                                <div className="w-16 h-16 mx-auto mb-4 glass rounded-2xl flex items-center justify-center">
-                                    <i className="fas fa-map text-slate-400" style={{ fontSize: '2rem' }}></i>
+                <div className="panel-content glass-dark">
+                    <div className="p-6 border-b border-white/10">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-xl font-semibold text-white flex items-center space-x-3">
+                                <i className="fas fa-layer-group text-accent-400"></i>
+                                <span>Geofences</span>
+                            </h2>
+                            <button
+                                onClick={() => setShowCreateModal(true)}
+                                className="btn-accent px-4 py-2 text-white text-sm font-medium rounded-lg"
+                            >
+                                <i className="fas fa-plus mr-2"></i>
+                                Create
+                            </button>
+                        </div>
+
+                        <div className="flex space-x-2 mb-4">
+                            <button
+                                onClick={() => onDrawingModeChange(drawingMode === 'polygon' ? null : 'polygon')}
+                                className={`flex-1 py-2 px-3 text-xs font-medium rounded-lg transition-colors ${
+                                    drawingMode === 'polygon' 
+                                        ? 'btn-warning text-white' 
+                                        : 'bg-slate-700 hover:bg-slate-600 text-slate-300'
+                                }`}
+                            >
+                                <i className="fas fa-draw-polygon mr-2"></i>
+                                Polygon
+                            </button>
+                            <button
+                                onClick={() => onDrawingModeChange(drawingMode === 'circle' ? null : 'circle')}
+                                className={`flex-1 py-2 px-3 text-xs font-medium rounded-lg transition-colors ${
+                                    drawingMode === 'circle' 
+                                        ? 'btn-warning text-white' 
+                                        : 'bg-slate-700 hover:bg-slate-600 text-slate-300'
+                                }`}
+                            >
+                                <i className="fas fa-circle-notch mr-2"></i>
+                                Circle
+                            </button>
+                        </div>
+
+                        {drawingMode && (
+                            <div className="bg-amber-900/20 border border-amber-500/50 rounded-xl p-3 mb-4">
+                                <div className="flex items-center space-x-2 text-amber-300">
+                                    <i className="fas fa-info-circle"></i>
+                                    <span className="text-xs font-medium">
+                                        Drawing mode active. Click on the map to create a {drawingMode}.
+                                    </span>
                                 </div>
-                                <h3 className="font-semibold text-lg text-white mb-2">Select an Alert</h3>
-                                <p className="text-slate-400 text-sm">Choose an SOS alert from the feed to view location</p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex-grow overflow-y-auto p-6">
+                        {geofences.length === 0 ? (
+                            <div className="text-center text-slate-500 pt-20 animate-fade-in">
+                                <div className="w-24 h-24 mx-auto mb-6 glass rounded-3xl flex items-center justify-center">
+                                    <i className="fas fa-layer-group animate-pulse text-slate-600 text-4xl"></i>
+                                </div>
+                                <h3 className="font-semibold text-xl mb-3 text-slate-400">No Geofences</h3>
+                                <p className="text-sm text-slate-500">Create geofences to monitor specific areas</p>
+                            </div>
+                        ) : (
+                            <div>
+                                {geofences.map((geofence) => (
+                                    <GeofenceItem
+                                        key={geofence.id}
+                                        geofence={geofence}
+                                        onEdit={handleEditGeofence}
+                                        onDelete={onDeleteGeofence}
+                                        onToggle={onToggleGeofence}
+                                        onFocus={onFocusGeofence}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {showCreateModal && (
+                        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                            <div className="glass-dark rounded-2xl p-6 w-full max-w-md mx-4 animate-slide-up">
+                                <h3 className="text-xl font-semibold text-white mb-4">
+                                    {editingGeofence ? 'Edit Geofence' : 'Create New Geofence'}
+                                </h3>
+
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-slate-300 text-sm font-medium mb-2">
+                                            Geofence Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={newGeofence.name}
+                                            onChange={(e) => setNewGeofence({ ...newGeofence, name: e.target.value })}
+                                            className="w-full px-4 py-3 glass rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                            placeholder="Enter geofence name"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-slate-300 text-sm font-medium mb-2">
+                                            Type
+                                        </label>
+                                        <select
+                                            value={newGeofence.type}
+                                            onChange={(e) => setNewGeofence({ ...newGeofence, type: e.target.value })}
+                                            className="w-full px-4 py-3 glass rounded-xl text-white bg-dark-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                        >
+                                            {Object.entries(GEOFENCE_TYPES).map(([key, config]) => (
+                                                <option key={key} value={key}>{config.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-slate-300 text-sm font-medium mb-2">
+                                            Priority
+                                        </label>
+                                        <select
+                                            value={newGeofence.priority}
+                                            onChange={(e) => setNewGeofence({ ...newGeofence, priority: e.target.value })}
+                                            className="w-full px-4 py-3 glass rounded-xl text-white bg-dark-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                                        >
+                                            {Object.entries(ALERT_PRIORITIES).map(([key, config]) => (
+                                                <option key={key} value={key}>{config.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="flex items-center justify-between p-3 glass rounded-xl">
+                                            <span className="text-sm text-slate-300">Alert on Entry</span>
+                                            <div 
+                                                className={`toggle-switch ${newGeofence.alertOnEntry ? 'active' : ''}`}
+                                                onClick={() => setNewGeofence({ ...newGeofence, alertOnEntry: !newGeofence.alertOnEntry })}
+                                            >
+                                                <div className="toggle-knob"></div>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-between p-3 glass rounded-xl">
+                                            <span className="text-sm text-slate-300">Alert on Exit</span>
+                                            <div 
+                                                className={`toggle-switch ${newGeofence.alertOnExit ? 'active' : ''}`}
+                                                onClick={() => setNewGeofence({ ...newGeofence, alertOnExit: !newGeofence.alertOnExit })}
+                                            >
+                                                <div className="toggle-knob"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex space-x-3 mt-6">
+                                    <button
+                                        onClick={() => {
+                                            setShowCreateModal(false);
+                                            setEditingGeofence(null);
+                                            setNewGeofence({
+                                                name: '',
+                                                type: 'MONITORING',
+                                                priority: 'medium',
+                                                alertOnEntry: true,
+                                                alertOnExit: false,
+                                                active: true
+                                            });
+                                        }}
+                                        className="flex-1 py-3 px-4 bg-slate-600 hover:bg-slate-700 text-white font-medium rounded-xl transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={editingGeofence ? handleUpdateGeofence : handleCreateGeofence}
+                                        className="flex-1 py-3 px-4 btn-primary text-white font-medium rounded-xl"
+                                        disabled={!newGeofence.name.trim()}
+                                    >
+                                        {editingGeofence ? 'Update' : 'Create'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
-                    <div ref={mapContainerRef} id="map" className="h-full w-full"></div>
                 </div>
             );
         };
-        
-        // Main App Component
-        const App = () => {
-            const [isConnected, setIsConnected] = useState(false);
-            const [alerts, setAlerts] = useState([]);
-            const [selectedAlert, setSelectedAlert] = useState(null);
-            const [lastUpdate, setLastUpdate] = useState(null);
-            const [connectionError, setConnectionError] = useState(null);
-            const socketRef = useRef(null);
-            
+
+        // Google Maps Component with Geofencing
+        const MapView = ({ alerts, selectedAlert, currentLocation, geofences, onGeofenceCreated, drawingMode, onDrawingModeChange }) => {
+            const mapRef = useRef(null);
+            const mapInstanceRef = useRef(null);
+            const drawingManagerRef = useRef(null);
+            const alertMarkersRef = useRef([]);
+            const geofenceOverlaysRef = useRef([]);
+            const currentLocationMarkerRef = useRef(null);
+            const infoWindowRef = useRef(null);
+            const [mapsLoaded, setMapsLoaded] = useState(false);
+            const [mapError, setMapError] = useState(null);
+
             useEffect(() => {
-                // Initialize Socket.IO connection to your Render server
-                const initializeSocket = () => {
-                    try {
-                        if (typeof io !== 'undefined') {
-                            console.log('Connecting to Vortex SOS server:', SERVER_URL);
-                            
-                            socketRef.current = io(SERVER_URL + NAMESPACE, {
-                                transports: ['websocket', 'polling'],
-                                path: '/socket.io',
-                                withCredentials: false,
-                                reconnection: true,
-                                reconnectionAttempts: 10,
-                                reconnectionDelay: 1000,
-                                timeout: 20000,
-                                forceNew: true
-                            });
-                            
-                            // Log all events to discover the actual event names from your server
-                            socketRef.current.onAny((event, ...args) => {
-                                console.log('[SOCKET EVENT]', event, args);
-                            });
-                            
-                            socketRef.current.on('connect', () => {
-                                console.log('✅ Connected to Vortex SOS server');
-                                setIsConnected(true);
-                                setConnectionError(null);
-                                setLastUpdate(new Date());
-                                
-                                // Optional: Request initial backlog if server supports acknowledgments
-                                socketRef.current.emit('subscribeSOS', {}, (initialAlerts = []) => {
-                                    try {
-                                        if (Array.isArray(initialAlerts) && initialAlerts.length > 0) {
-                                            console.log('Received initial alerts:', initialAlerts);
-                                            const normalized = initialAlerts
-                                                .map(a => toAlert(a))
-                                                .filter(a => a && Number.isFinite(a.lat) && Number.isFinite(a.lon));
-                                            
-                                            if (normalized.length) {
-                                                setAlerts(prev => [...normalized, ...prev].slice(0, 50));
-                                                setSelectedAlert(prev => prev || normalized[0]);
-                                            }
-                                        }
-                                    } catch (e) {
-                                        console.error('Backlog normalization failed:', e);
-                                    }
-                                });
-                            });
-                            
-                            socketRef.current.on('disconnect', (reason) => {
-                                console.log('❌ Disconnected from server:', reason);
-                                setIsConnected(false);
-                                setConnectionError(`Disconnected: ${reason}`);
-                            });
-                            
-                            socketRef.current.on('connect_error', (error) => {
-                                console.error('❌ Connection error:', error);
-                                setIsConnected(false);
-                                setConnectionError(error.message || 'Connection failed');
-                            });
-                            
-                            socketRef.current.on('reconnect', (attemptNumber) => {
-                                console.log('🔄 Reconnected after', attemptNumber, 'attempts');
-                                setConnectionError(null);
-                            });
-                            
-                            socketRef.current.on('reconnect_failed', () => {
-                                console.error('❌ Reconnection failed');
-                                setConnectionError('Failed to reconnect to server');
-                            });
-                            
-                            // Subscribe to multiple possible SOS event names
-                            // Check console logs to see which one your server actually uses
-                            const sosEventNames = [
-                                'sosAlert',      // Original event name from your code
-                                'sos',           // Common alternative
-                                'alert',         // Generic alert
-                                'emergency',     // Emergency event
-                                'sos:alert',     // Namespaced event
-                                'newSOS',        // Alternative naming
-                                'distress'       // Distress signal
-                            ];
-                            
-                            sosEventNames.forEach(eventName => {
-                                socketRef.current.on(eventName, (payload) => {
-                                    console.log(`🚨 Received SOS via '${eventName}':`, payload);
-                                    
-                                    try {
-                                        const newAlert = toAlert(payload);
-                                        console.log('Normalized alert:', newAlert);
-                                        
-                                        // Validate that we have valid coordinates
-                                        if (!newAlert || !Number.isFinite(newAlert.lat) || !Number.isFinite(newAlert.lon)) {
-                                            console.warn('Invalid alert coordinates:', newAlert);
-                                            return;
-                                        }
-                                        
-                                        setAlerts(prev => [newAlert, ...prev].slice(0, 50));
-                                        setLastUpdate(new Date());
-                                        playAlertSound();
-                                        setSelectedAlert(prev => prev || newAlert);
-                                        
-                                        console.log('✅ Alert processed successfully');
-                                    } catch (e) {
-                                        console.error('Error processing SOS alert:', e);
-                                    }
-                                });
-                            });
-                            
-                        } else {
-                            console.log('❌ Socket.IO not available');
-                            setConnectionError('Socket.IO library not loaded');
-                        }
-                    } catch (error) {
-                        console.error('❌ Socket initialization error:', error);
-                        setConnectionError('Socket initialization failed');
-                    }
+                const handleMapsReady = () => {
+                    setMapsLoaded(true);
+                    initializeMap();
                 };
-                
-                initializeSocket();
-                
+
+                const handleMapsError = (event) => {
+                    setMapError(event.detail?.error || 'Unknown error');
+                    setMapsLoaded(false);
+                };
+
+                window.addEventListener('googleMapsReady', handleMapsReady);
+                window.addEventListener('googleMapsError', handleMapsError);
+
+                if (window.googleMapsLoaded) {
+                    handleMapsReady();
+                }
+
                 return () => {
-                    if (socketRef.current) {
-                        console.log('Disconnecting from server...');
-                        socketRef.current.disconnect();
-                    }
+                    window.removeEventListener('googleMapsReady', handleMapsReady);
+                    window.removeEventListener('googleMapsError', handleMapsError);
                 };
             }, []);
-            
-            const handleAlertClick = (alert) => {
-                setSelectedAlert(alert);
-            };
-            
+
+            const initializeMap = useCallback(() => {
+                if (!mapRef.current || !window.google || mapInstanceRef.current) return;
+
+                try {
+                    const darkMapStyles = [
+                        { elementType: "geometry", stylers: [{ color: "#1e293b" }] },
+                        { elementType: "labels.text.stroke", stylers: [{ color: "#0f172a" }] },
+                        { elementType: "labels.text.fill", stylers: [{ color: "#64748b" }] },
+                        { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#3b82f6" }] },
+                        { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#64748b" }] },
+                        { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#334155" }] },
+                        { featureType: "road", elementType: "geometry", stylers: [{ color: "#475569" }] },
+                        { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#1e293b" }] },
+                        { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#64748b" }] },
+                        { featureType: "water", elementType: "geometry", stylers: [{ color: "#0f172a" }] },
+                        { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#64748b" }] },
+                        { featureType: "transit", elementType: "geometry", stylers: [{ color: "#334155" }] },
+                        { featureType: "transit.station", elementType: "labels.text.fill", stylers: [{ color: "#3b82f6" }] }
+                    ];
+
+                    const defaultCenter = currentLocation ? 
+                        { lat: currentLocation.lat, lng: currentLocation.lng } : 
+                        { lat: 28.6139, lng: 77.2090 };
+
+                    mapInstanceRef.current = new google.maps.Map(mapRef.current, {
+                        zoom: 12,
+                        center: defaultCenter,
+                        styles: darkMapStyles,
+                        backgroundColor: '#0f172a',
+                        disableDefaultUI: false,
+                        zoomControl: true,
+                        mapTypeControl: false,
+                        scaleControl: true,
+                        streetViewControl: false,
+                        rotateControl: false,
+                        fullscreenControl: true,
+                        gestureHandling: 'cooperative'
+                    });
+
+                    drawingManagerRef.current = new google.maps.drawing.DrawingManager({
+                        drawingMode: null,
+                        drawingControl: false,
+                        polygonOptions: {
+                            fillColor: '#f59e0b',
+                            fillOpacity: 0.2,
+                            strokeWeight: 3,
+                            strokeColor: '#f59e0b',
+                            clickable: true,
+                            editable: true,
+                            zIndex: 1
+                        },
+                        circleOptions: {
+                            fillColor: '#f59e0b',
+                            fillOpacity: 0.2,
+                            strokeWeight: 3,
+                            strokeColor: '#f59e0b',
+                            clickable: true,
+                            editable: true,
+                            zIndex: 1
+                        }
+                    });
+
+                    drawingManagerRef.current.setMap(mapInstanceRef.current);
+
+                    google.maps.event.addListener(drawingManagerRef.current, 'overlaycomplete', (event) => {
+                        const overlay = event.overlay;
+                        let geofenceData = null;
+
+                        if (event.type === google.maps.drawing.OverlayType.POLYGON) {
+                            const path = overlay.getPath();
+                            const points = [];
+
+                            for (let i = 0; i < path.getLength(); i++) {
+                                const point = path.getAt(i);
+                                points.push({ lat: point.lat(), lng: point.lng() });
+                            }
+
+                            geofenceData = {
+                                type: 'polygon',
+                                points: points,
+                                center: null,
+                                radius: null
+                            };
+                        } else if (event.type === google.maps.drawing.OverlayType.CIRCLE) {
+                            const center = overlay.getCenter();
+                            const radius = overlay.getRadius();
+
+                            geofenceData = {
+                                type: 'circle',
+                                points: [],
+                                center: { lat: center.lat(), lng: center.lng() },
+                                radius: radius
+                            };
+                        }
+
+                        if (geofenceData && onGeofenceCreated) {
+                            onGeofenceCreated(geofenceData);
+                        }
+
+                        overlay.setMap(null);
+                        drawingManagerRef.current.setDrawingMode(null);
+                        onDrawingModeChange(null);
+                    });
+
+                    infoWindowRef.current = new google.maps.InfoWindow({
+                        pixelOffset: new google.maps.Size(0, -10)
+                    });
+
+                    console.log('✅ Google Maps with Drawing Manager initialized successfully');
+                } catch (error) {
+                    console.error('❌ Google Maps initialization failed:', error);
+                    setMapError('Map initialization failed: ' + error.message);
+                }
+            }, [currentLocation, onGeofenceCreated, onDrawingModeChange]);
+
+            useEffect(() => {
+                if (!drawingManagerRef.current) return;
+
+                if (drawingMode === 'polygon') {
+                    drawingManagerRef.current.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+                } else if (drawingMode === 'circle') {
+                    drawingManagerRef.current.setDrawingMode(google.maps.drawing.OverlayType.CIRCLE);
+                } else {
+                    drawingManagerRef.current.setDrawingMode(null);
+                }
+            }, [drawingMode]);
+
+            useEffect(() => {
+                if (!mapsLoaded || !currentLocation || !mapInstanceRef.current) return;
+
+                if (currentLocationMarkerRef.current) {
+                    currentLocationMarkerRef.current.setMap(null);
+                }
+
+                const locationIcon = {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 15,
+                    fillColor: '#14b8a6',
+                    fillOpacity: 1,
+                    strokeColor: '#ffffff',
+                    strokeWeight: 4,
+                    strokeOpacity: 1
+                };
+
+                currentLocationMarkerRef.current = new google.maps.Marker({
+                    position: { lat: currentLocation.lat, lng: currentLocation.lng },
+                    map: mapInstanceRef.current,
+                    icon: locationIcon,
+                    title: 'Your Live Location',
+                    zIndex: 1000
+                });
+
+            }, [mapsLoaded, currentLocation]);
+
+            useEffect(() => {
+                if (!mapsLoaded || !mapInstanceRef.current) return;
+
+                geofenceOverlaysRef.current.forEach(overlay => overlay.setMap(null));
+                geofenceOverlaysRef.current = [];
+
+                geofences.forEach((geofence) => {
+                    if (!geofence.active) return;
+
+                    const typeConfig = GEOFENCE_TYPES[geofence.type] || GEOFENCE_TYPES.MONITORING;
+                    let overlay = null;
+
+                    if (geofence.shapeType === 'polygon' && geofence.points?.length > 0) {
+                        overlay = new google.maps.Polygon({
+                            paths: geofence.points,
+                            strokeColor: typeConfig.color,
+                            strokeOpacity: 0.8,
+                            strokeWeight: 3,
+                            fillColor: typeConfig.color,
+                            fillOpacity: 0.15,
+                            map: mapInstanceRef.current
+                        });
+                    } else if (geofence.shapeType === 'circle' && geofence.center && geofence.radius) {
+                        overlay = new google.maps.Circle({
+                            center: geofence.center,
+                            radius: geofence.radius,
+                            strokeColor: typeConfig.color,
+                            strokeOpacity: 0.8,
+                            strokeWeight: 3,
+                            fillColor: typeConfig.color,
+                            fillOpacity: 0.15,
+                            map: mapInstanceRef.current
+                        });
+                    }
+
+                    if (overlay) {
+                        overlay.addListener('click', () => {
+                            const content = `
+                                <div style="padding: 15px; min-width: 200px; font-family: Inter, sans-serif;">
+                                    <h3 style="margin: 0 0 10px 0; font-size: 18px; font-weight: 700; color: ${typeConfig.color};">
+                                        ${geofence.name}
+                                    </h3>
+                                    <div style="margin-bottom: 8px;">
+                                        <strong>Type:</strong> ${typeConfig.name}
+                                    </div>
+                                    <div style="margin-bottom: 8px;">
+                                        <strong>Priority:</strong> ${ALERT_PRIORITIES[geofence.priority]?.name || 'Medium'}
+                                    </div>
+                                    <div style="margin-bottom: 8px;">
+                                        <strong>Shape:</strong> ${geofence.shapeType || 'polygon'}
+                                    </div>
+                                    <div style="font-size: 12px; color: #666; margin-top: 10px;">
+                                        Created: ${new Date(geofence.createdAt).toLocaleString()}
+                                    </div>
+                                </div>
+                            `;
+
+                            infoWindowRef.current.setContent(content);
+                            infoWindowRef.current.setPosition(
+                                geofence.shapeType === 'circle' ? geofence.center : geofence.points[0]
+                            );
+                            infoWindowRef.current.open(mapInstanceRef.current);
+                        });
+
+                        geofenceOverlaysRef.current.push(overlay);
+                    }
+                });
+            }, [mapsLoaded, geofences]);
+
+            useEffect(() => {
+                if (!mapsLoaded || !mapInstanceRef.current) return;
+
+                alertMarkersRef.current.forEach(marker => marker.setMap(null));
+                alertMarkersRef.current = [];
+
+                alerts.forEach((alert) => {
+                    if (alert.lat && alert.lon && !isNaN(alert.lat) && !isNaN(alert.lon)) {
+                        const alertIcon = {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 18,
+                            fillColor: '#ef4444',
+                            fillOpacity: 0.9,
+                            strokeColor: '#ffffff',
+                            strokeWeight: 4,
+                            strokeOpacity: 1
+                        };
+
+                        const marker = new google.maps.Marker({
+                            position: { lat: alert.lat, lng: alert.lon },
+                            map: mapInstanceRef.current,
+                            icon: alertIcon,
+                            title: `Emergency: ${alert.user}`,
+                            animation: google.maps.Animation.DROP,
+                            zIndex: 100
+                        });
+
+                        alertMarkersRef.current.push(marker);
+                    }
+                });
+
+                if (selectedAlert && selectedAlert.lat && selectedAlert.lon && mapInstanceRef.current) {
+                    mapInstanceRef.current.panTo({ lat: selectedAlert.lat, lng: selectedAlert.lon });
+                    mapInstanceRef.current.setZoom(16);
+                }
+            }, [mapsLoaded, alerts, selectedAlert]);
+
             return (
-                <div className="h-screen flex flex-col animate-fade-in">
-                    <Header 
-                        isConnected={isConnected} 
-                        alertCount={alerts.length}
-                        lastUpdate={lastUpdate}
-                    />
-                    
-                    {connectionError && (
-                        <div className="bg-red-900/20 border border-red-500/50 text-red-300 px-4 py-2 text-sm">
-                            ⚠️ Connection Error: {connectionError}
+                <div className="glass-dark h-full flex flex-col">
+                    <div className="p-6 border-b border-white/10">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-semibold text-white flex items-center space-x-3">
+                                <i className="fas fa-map-marked-alt text-primary-400"></i>
+                                <span>Emergency Map</span>
+                                <span className="text-xs bg-green-600 px-3 py-1 rounded-full text-white font-semibold">
+                                    Google Maps
+                                </span>
+                            </h2>
+                            <div className="flex items-center space-x-4 text-sm text-slate-400">
+                                {currentLocation && (
+                                    <div className="flex items-center space-x-2">
+                                        <div className="w-2 h-2 bg-accent-400 rounded-full live-location-pulse"></div>
+                                        <span>Live Location Active</span>
+                                    </div>
+                                )}
+                                {geofences.filter(g => g.active).length > 0 && (
+                                    <div className="flex items-center space-x-2">
+                                        <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
+                                        <span>{geofences.filter(g => g.active).length} Active Geofences</span>
+                                    </div>
+                                )}
+                                {alerts.length > 0 && (
+                                    <div className="flex items-center space-x-2">
+                                        <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                                        <span>{alerts.length} Alert{alerts.length !== 1 ? 's' : ''}</span>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    )}
-                    
-                    <div className="flex-1 flex overflow-hidden">
-                        <div className="w-1/3 min-w-[400px]">
-                            <LiveFeed 
-                                alerts={alerts} 
-                                onAlertClick={handleAlertClick}
-                                isConnected={isConnected}
-                            />
-                        </div>
-                        
-                        <div className="flex-1 p-6">
-                            <MapView selectedAlert={selectedAlert} />
+                    </div>
+
+                    <div className="flex-grow p-6 relative">
+                        <div ref={mapRef} className="map-container w-full h-full"></div>
+
+                        {(!mapsLoaded && !mapError) && (
+                            <div className="absolute inset-6 flex items-center justify-center bg-dark-800/90 rounded-2xl backdrop-blur-sm">
+                                <div className="text-center">
+                                    <div className="spinner mx-auto mb-4"></div>
+                                    <p className="text-slate-300 font-medium">Loading Google Maps...</p>
+                                    <p className="text-slate-500 text-sm mt-2">Initializing drawing tools and map interface</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {mapError && (
+                            <div className="absolute inset-6 flex items-center justify-center bg-dark-800/90 rounded-2xl backdrop-blur-sm">
+                                <div className="text-center max-w-md">
+                                    <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i className="fas fa-exclamation-triangle text-red-400 text-2xl"></i>
+                                    </div>
+                                    <h3 className="text-red-400 font-semibold text-lg mb-2">Google Maps Error</h3>
+                                    <p className="text-slate-300 text-sm mb-4">{mapError}</p>
+                                    <button 
+                                        onClick={() => window.location.reload()} 
+                                        className="btn-primary px-4 py-2 rounded-lg text-sm font-medium"
+                                    >
+                                        Reload Page
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="absolute bottom-8 left-8 glass p-4 rounded-xl">
+                            <h4 className="text-sm font-semibold text-white mb-3">Map Legend</h4>
+                            <div className="space-y-2 text-xs">
+                                <div className="flex items-center space-x-2">
+                                    <div className="w-4 h-4 bg-accent-400 rounded-full"></div>
+                                    <span className="text-slate-300">Your Location</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                                    <span className="text-slate-300">Emergency Alert</span>
+                                </div>
+                                {Object.entries(GEOFENCE_TYPES).map(([key, config]) => (
+                                    <div key={key} className="flex items-center space-x-2">
+                                        <div className="w-4 h-4 rounded" style={{ backgroundColor: config.color }}></div>
+                                        <span className="text-slate-300">{config.name}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             );
         };
-        
+
+        // Main Dashboard Component
+        const Dashboard = ({ user, onLogout }) => {
+            const [alerts, setAlerts] = useState([]);
+            const [geofences, setGeofences] = useState([]);
+            const [geofenceViolations, setGeofenceViolations] = useState([]);
+            const [selectedAlert, setSelectedAlert] = useState(null);
+            const [isConnected, setIsConnected] = useState(false);
+            const [lastUpdate, setLastUpdate] = useState(null);
+            const [currentView, setCurrentView] = useState('alerts');
+            const [drawingMode, setDrawingMode] = useState(null);
+            const [notification, setNotification] = useState(null);
+            const { location: currentLocation, loading: locationLoading, error: locationError } = useCurrentLocation();
+            const socketRef = useRef(null);
+
+            // Socket connection
+            useEffect(() => {
+                const connectSocket = () => {
+                    try {
+                        socketRef.current = io(SERVER_URL + NAMESPACE, {
+                            transports: ['websocket', 'polling'],
+                            timeout: 20000,
+                            reconnection: true,
+                            reconnectionAttempts: 10,
+                            reconnectionDelay: 1000
+                        });
+
+                        socketRef.current.on('connect', () => {
+                            console.log('✅ Connected to SOS server');
+                            setIsConnected(true);
+                        });
+
+                        socketRef.current.on('disconnect', () => {
+                            console.log('❌ Disconnected from SOS server');
+                            setIsConnected(false);
+                        });
+
+                        const eventNames = ['sos', 'sosAlert', 'emergency', 'alert', 'newSOS'];
+                        eventNames.forEach(eventName => {
+                            socketRef.current.on(eventName, (data) => {
+                                console.log(`🚨 Received ${eventName}:`, data);
+                                const alert = toAlert(data);
+                                if (alert && alert.lat && alert.lon && !isNaN(alert.lat) && !isNaN(alert.lon)) {
+                                    setAlerts(prev => [alert, ...prev].slice(0, 100));
+                                    setLastUpdate(new Date().toISOString());
+                                    playAlertSound();
+
+                                    if (Notification.permission === 'granted') {
+                                        new Notification('Emergency Alert Received', {
+                                            body: `${alert.user}: ${alert.message}`,
+                                            icon: '/favicon.ico'
+                                        });
+                                    }
+                                }
+                            });
+                        });
+
+                        socketRef.current.on('updateGeofence', (data) => {
+                            console.log('📍 Received geofence update:', data);
+                            if (data) {
+                                setGeofences(prev => {
+                                    const existing = prev.find(g => g.id === data.id);
+                                    if (existing) {
+                                        return prev.map(g => g.id === data.id ? { ...g, ...data } : g);
+                                    } else {
+                                        return [data, ...prev];
+                                    }
+                                });
+                            }
+                        });
+
+                        socketRef.current.on('geofenceViolation', (data) => {
+                            console.log('⚠️ Received geofence violation:', data);
+                            if (data) {
+                                const violation = {
+                                    id: Date.now() + Math.random(),
+                                    type: 'geofence_violation',
+                                    user: data.user || 'Unknown User',
+                                    action: data.action || 'entered',
+                                    geofenceName: data.geofenceName || 'Unknown Zone',
+                                    geofenceId: data.geofenceId,
+                                    lat: parseFloat(data.lat),
+                                    lon: parseFloat(data.lon || data.lng),
+                                    priority: data.priority || 'medium',
+                                    timestamp: data.timestamp || new Date().toISOString()
+                                };
+
+                                setGeofenceViolations(prev => [violation, ...prev].slice(0, 50));
+                                playAlertSound();
+
+                                if (Notification.permission === 'granted') {
+                                    new Notification('Geofence Violation', {
+                                        body: `${violation.user} ${violation.action} ${violation.geofenceName}`,
+                                        icon: '/favicon.ico'
+                                    });
+                                }
+                            }
+                        });
+
+                        socketRef.current.on('connect_error', (error) => {
+                            console.error('❌ Socket connection error:', error);
+                            setIsConnected(false);
+                        });
+
+                    } catch (error) {
+                        console.error('❌ Socket setup error:', error);
+                        setIsConnected(false);
+                    }
+                };
+
+                if (Notification.permission === 'default') {
+                    Notification.requestPermission();
+                }
+
+                connectSocket();
+
+                return () => {
+                    if (socketRef.current) {
+                        socketRef.current.disconnect();
+                    }
+                };
+            }, []);
+
+            const showNotification = (message, type = 'success') => {
+                setNotification({ message, type });
+            };
+
+            const handleAlertClick = (alert) => {
+                setSelectedAlert(alert);
+            };
+
+            const handleCreateGeofence = (newGeofenceConfig) => {
+                setDrawingMode('polygon');
+                window.pendingGeofenceConfig = newGeofenceConfig;
+                showNotification('Draw the geofence area on the map', 'info');
+            };
+
+            const handleGeofenceCreated = (geofenceData) => {
+                const config = window.pendingGeofenceConfig;
+                if (!config) return;
+
+                const newGeofence = {
+                    id: Date.now().toString(),
+                    ...config,
+                    ...geofenceData,
+                    shapeType: geofenceData.type,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+
+                setGeofences(prev => [newGeofence, ...prev]);
+
+                if (socketRef.current && isConnected) {
+                    socketRef.current.emit('createGeofence', newGeofence);
+                    console.log('📡 Sent geofence to server:', newGeofence);
+                }
+
+                window.pendingGeofenceConfig = null;
+                showNotification(`Geofence "${newGeofence.name}" created successfully!`);
+            };
+
+            const handleEditGeofence = (geofenceId, updatedData) => {
+                const updatedGeofence = {
+                    ...geofences.find(g => g.id === geofenceId),
+                    ...updatedData,
+                    updatedAt: new Date().toISOString()
+                };
+
+                setGeofences(prev => prev.map(g => g.id === geofenceId ? updatedGeofence : g));
+
+                if (socketRef.current && isConnected) {
+                    socketRef.current.emit('updateGeofence', updatedGeofence);
+                }
+
+                showNotification(`Geofence "${updatedData.name}" updated successfully!`);
+            };
+
+            const handleDeleteGeofence = (geofenceId) => {
+                const geofence = geofences.find(g => g.id === geofenceId);
+                if (!geofence) return;
+
+                if (confirm(`Are you sure you want to delete "${geofence.name}"?`)) {
+                    setGeofences(prev => prev.filter(g => g.id !== geofenceId));
+
+                    if (socketRef.current && isConnected) {
+                        socketRef.current.emit('deleteGeofence', { id: geofenceId });
+                    }
+
+                    showNotification(`Geofence "${geofence.name}" deleted successfully!`);
+                }
+            };
+
+            const handleToggleGeofence = (geofenceId) => {
+                const geofence = geofences.find(g => g.id === geofenceId);
+                if (!geofence) return;
+
+                const updatedGeofence = {
+                    ...geofence,
+                    active: !geofence.active,
+                    updatedAt: new Date().toISOString()
+                };
+
+                setGeofences(prev => prev.map(g => g.id === geofenceId ? updatedGeofence : g));
+
+                if (socketRef.current && isConnected) {
+                    socketRef.current.emit('updateGeofence', updatedGeofence);
+                }
+
+                showNotification(
+                    `Geofence "${geofence.name}" ${updatedGeofence.active ? 'activated' : 'deactivated'}!`
+                );
+            };
+
+            const handleFocusGeofence = (geofence) => {
+                console.log('Focus on geofence:', geofence);
+            };
+
+            const handleDrawingModeChange = (mode) => {
+                setDrawingMode(mode);
+                if (!mode) {
+                    window.pendingGeofenceConfig = null;
+                }
+            };
+
+            const addDemoAlert = () => {
+                const demoAlert = {
+                    id: Date.now() + Math.random(),
+                    user: 'Demo User',
+                    message: 'This is a test emergency alert with Google Maps integration',
+                    lat: 28.6139 + (Math.random() - 0.5) * 0.1,
+                    lon: 77.2090 + (Math.random() - 0.5) * 0.1,
+                    timestamp: new Date().toISOString()
+                };
+                setAlerts(prev => [demoAlert, ...prev].slice(0, 100));
+                playAlertSound();
+            };
+
+            return (
+                <div className="h-screen flex flex-col bg-dark-950 animate-fade-in">
+                    <Header 
+                        isConnected={isConnected} 
+                        alertCount={alerts.length}
+                        lastUpdate={lastUpdate}
+                        user={user}
+                        onLogout={onLogout}
+                        currentLocation={currentLocation}
+                        mapsLoaded={window.googleMapsLoaded}
+                        mapError={window.googleMapsError}
+                        geofenceCount={geofences.length}
+                        activeDrawingMode={drawingMode}
+                    />
+
+                    <NotificationToast 
+                        notification={notification} 
+                        onClose={() => setNotification(null)} 
+                    />
+
+                    {locationError && (
+                        <div className="bg-amber-900/20 border-b border-amber-500/50 text-amber-300 px-6 py-3 flex items-center space-x-3">
+                            <i className="fas fa-exclamation-triangle text-amber-400"></i>
+                            <span className="text-sm">{locationError}</span>
+                        </div>
+                    )}
+
+                    <div className="flex-grow flex overflow-hidden">
+                        <div className="w-1/3 min-w-[400px] flex flex-col">
+                            <div className="flex bg-dark-800 border-b border-white/10">
+                                <button
+                                    onClick={() => setCurrentView('alerts')}
+                                    className={`tab-button flex-1 py-4 px-6 font-semibold transition-all duration-300 ${
+                                        currentView === 'alerts' 
+                                            ? 'active text-white' 
+                                            : 'text-slate-400 hover:text-white hover:bg-slate-700'
+                                    }`}
+                                >
+                                    <i className="fas fa-broadcast-tower mr-2"></i>
+                                    Alerts ({alerts.length + geofenceViolations.length})
+                                </button>
+                                <button
+                                    onClick={() => setCurrentView('geofences')}
+                                    className={`tab-button flex-1 py-4 px-6 font-semibold transition-all duration-300 ${
+                                        currentView === 'geofences' 
+                                            ? 'active text-white' 
+                                            : 'text-slate-400 hover:text-white hover:bg-slate-700'
+                                    }`}
+                                >
+                                    <i className="fas fa-layer-group mr-2"></i>
+                                    Geofences ({geofences.length})
+                                </button>
+                            </div>
+
+                            <div className="tab-content">
+                                {currentView === 'alerts' ? (
+                                    <LiveFeed 
+                                        alerts={alerts}
+                                        geofenceViolations={geofenceViolations}
+                                        onAlertClick={handleAlertClick}
+                                        isConnected={isConnected}
+                                    />
+                                ) : (
+                                    <GeofencePanel
+                                        geofences={geofences}
+                                        onCreateGeofence={handleCreateGeofence}
+                                        onEditGeofence={handleEditGeofence}
+                                        onDeleteGeofence={handleDeleteGeofence}
+                                        onToggleGeofence={handleToggleGeofence}
+                                        onFocusGeofence={handleFocusGeofence}
+                                        drawingMode={drawingMode}
+                                        onDrawingModeChange={handleDrawingModeChange}
+                                    />
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="flex-grow relative">
+                            <MapView 
+                                alerts={alerts}
+                                selectedAlert={selectedAlert}
+                                currentLocation={currentLocation}
+                                geofences={geofences}
+                                onGeofenceCreated={handleGeofenceCreated}
+                                drawingMode={drawingMode}
+                                onDrawingModeChange={handleDrawingModeChange}
+                            />
+
+                            <button
+                                onClick={addDemoAlert}
+                                className="absolute top-8 right-8 glass px-4 py-2 rounded-lg text-xs text-slate-300 hover:text-white transition-colors z-10"
+                                title="Add demo alert for testing"
+                            >
+                                <i className="fas fa-plus-circle mr-2"></i>
+                                Demo Alert
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main App Component
+        const App = () => {
+            const [user, setUser] = useState(null);
+
+            useEffect(() => {
+                const savedUser = sessionStorage.getItem('vortex_user');
+                if (savedUser) {
+                    try {
+                        setUser(JSON.parse(savedUser));
+                    } catch (error) {
+                        console.error('Error parsing saved user:', error);
+                        sessionStorage.removeItem('vortex_user');
+                    }
+                }
+            }, []);
+
+            const handleLogin = (userData) => {
+                setUser(userData);
+                sessionStorage.setItem('vortex_user', JSON.stringify(userData));
+            };
+
+            const handleLogout = () => {
+                setUser(null);
+                sessionStorage.removeItem('vortex_user');
+            };
+
+            if (!user) {
+                return <AuthPage onLogin={handleLogin} />;
+            }
+
+            return <Dashboard user={user} onLogout={handleLogout} />;
+        };
+
         // Render the app
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
